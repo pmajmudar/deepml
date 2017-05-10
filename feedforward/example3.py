@@ -22,28 +22,32 @@ class NeuralNet(object):
         # 3 input neurons
         # 4 neurons in the hidden layer
         # 1 output
-        self.weights_0 = self._initial_weights((2,hidden))
+        self.weights_0 = self._initial_weights((3,hidden))
         self.weights_1 = self._initial_weights((hidden,1))
 
     def _initial_weights(self, shape):
         # return a 3x1 matrix with random weights between -1 and 1, mean =-0
         return 2*np.random.random(shape) - 1
 
-    def feedforward(self, layer_0):
+    def feedforward(self, X):
+        X = np.array(X)
+        rows,cols = X.shape
+        layer_0 = np.ones((rows, cols+1))
+        layer_0[:,:-1] = X
+
         # Outputs a value for every training example
         layer_1 = logit(np.dot(layer_0, self.weights_0))
         layer_2 = logit(np.dot(layer_1, self.weights_1))
-        return layer_1, layer_2
+        return layer_0, layer_1, layer_2
 
     def predict(self, X):
-        _, y = self.feedforward(X)
+        _, _, y = self.feedforward(X)
         return y
 
     def train(self, X, y):
-        layer_0 = X
         for i in xrange(10000):
             #forward prop
-            layer_1, layer_2 = self.feedforward(layer_0)
+            layer_0, layer_1, layer_2 = self.feedforward(X)
 
             # error vector between predicted and training i.e. (t - y)
             layer_2_err = y - layer_2
@@ -70,10 +74,12 @@ X = np.array([ [0,0],
                [1,1] ])
 
 #y = np.array([ [0, 0, 1, 1] ]).T
+
+# XOR example
 y = np.array([ [0, 1, 1, 0] ]).T
 
 if __name__ == """__main__""":
     net = NeuralNet()
     net.train(X, y)
-    _, predict = net.feedforward([0,0.6])
+    predict = net.predict([[0,0.6]])
     print predict
