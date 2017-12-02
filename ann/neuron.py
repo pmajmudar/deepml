@@ -10,7 +10,7 @@ def sigmoid(x):
     """
     return 1.0 / (1.0 + np.exp(-x))
 
-def sigmod_deriv(x):
+def d_sigmod(x):
     """The Derivative can be expressed in terms
     of the output of a sigmoid, s.
 
@@ -25,3 +25,14 @@ def sigmod_deriv(x):
     s = sigmoid(x)
     ds = s*(1-s)
     return ds
+
+def relu(x):
+    """Rectified Linear Unit - ReLU"""
+    pass
+
+def d_relu(x):
+    pass
+
+def tanh(x):
+    """Tanh function."""
+    pass
